@@ -4,6 +4,7 @@
 
 # Strings
 
+from pprint import pprint
 nombre_curso = "Ultimate Python"
 descripcion_curso = """
 Ultimate Python,
@@ -382,8 +383,8 @@ mascotas.insert(1, "Dave") 	# Ingresamos Dave en la posición 1
 mascotas.append("Melvin") 	# Ingresamos Melvin al final
 mascotas.remove("Pulga") 	# Elimina la primera ocurrencia
 # Si queremos eliminar más de una ocurrencia tendremos que contar con count y ejecutar remove tantas veces
-mascotas. pop()				# Elimino el último
-mascotas. pop(1)			# Saca el elemento 1
+mascotas.pop()				# Elimino el último
+mascotas.pop(1)			# Saca el elemento 1
 del mascotas[1]				# Otra forma de eliminar el elemento 1
 mascotas.clear()			# Vacía la lista
 
@@ -560,3 +561,423 @@ if not pila:    # Falsy: lista vacía, string vacía o cero
     print("Pila vacía")
 
 # Ejercicio
+
+# 1. Eliminar los espacios en blanco de un string
+# y devolver una lista con los carateres restantes
+
+
+def quita_espacios(texto):
+    return list(texto.replace(" ", ""))
+
+    # return [char for char in texto if char != " "]
+
+# 2. Contar en un diccionario cuanto se repite los caracteres de un string
+
+
+def cuenta_caracteres(lista):
+    diccionario = {}
+
+    for char in lista:
+        if char in diccionario:
+            diccionario[char] += 1
+        else:
+            diccionario[char] = 1
+    return diccionario
+
+# 3. Ordenar las llaves de un diccionario
+# por el valor que tienen y devolver una lista
+# que contiene tuplas [("a", 3), ("b", 4), etc..]
+
+
+def ordena(diccionario):
+
+    # # Ordenar un diccionario
+    # return sorted(
+    #     diccionario.items(),
+    #     key=lambda key: key[1],
+    # 	  reverse= True
+    # )
+
+    # Convertimos el diccionario a una matriz para poder ordenarla con sort
+    matriz = []
+
+    for item in diccionario:		# Iteramos las llaves
+        matriz.append([item, diccionario[item]])
+
+    # Ordenamos por el númeo de repeticiones
+    matriz.sort(key=lambda el: el[1])
+
+    # Convertimos un array de arrays en un array de tuplas
+    tuplas = []
+    for item in matriz:
+        tuplas.append(tuple(item))
+
+    # Devolvemos el array de tuplas
+    return tuplas
+
+# 4. De un listado de tuplas, devolver las tuplas que tenga el mayor valor
+
+
+def mayores_tuplas(lista):
+    tuplas = []
+    valor = 0
+    for tupla in lista:
+        if tupla[1] > valor:
+            tuplas.clear()
+            tuplas.append(tupla)
+            valor = tupla[1]
+        elif tupla[1] == valor:
+            tuplas.append(tupla)
+
+    return tuplas
+
+
+# 5. Crear un mensaje que diga:
+# Los caracteres que más se repiten con 4 repeticiones son:
+# -C
+# -D
+
+def mensaje_resumen(tuplas):
+    repeticiones = tuplas[0][1]
+    print(
+        f"Los caracteres que más se repiten con {repeticiones} repeticiones son:")
+    for tupla in tuplas:
+        print(f"- {tupla[0].upper()}")
+
+
+# 6. Juntar la solucion de los ejercicios anteriores
+# para encontrar los caracteres que más se repiten
+# de un sring
+
+def caracteres_repetidos(string):
+    lista = quita_espacios(string)
+    diccionario = cuenta_caracteres(lista)
+    tuplas = ordena(diccionario)
+    tuplas_mayor = mayores_tuplas(tuplas)
+    mensaje_resumen(tuplas_mayor)
+
+
+caracteres_repetidos("aaaaaaEn un llugak lañsdf alksdfj asdf")
+
+
+#############################
+# Seccion 6: Clases en python
+#############################
+
+# Introducción a las clases
+mensaje = "Hola mundo"
+type(mensaje)
+
+# Clase: es el plano de construcción
+# Objeto: es una instancia de una clase
+
+# Creando clases (PascalCase o UpperCamelCase)
+# Así cuendo instancie no pongo como en otros lenguajes
+
+
+class Perro:
+    def habla(self):  # Esto ya no se llama función, es un método. Self es obligatorio
+        print("Guay!")
+
+
+mi_perro = Perro()  # Esto es como new Perro() en otros leguajes
+type(mi_perro)      # Vemos a que clase pertenee
+mi_perro.habla()    # No le paso ningún argumento
+# Preguntamos si mi_perro es una instancia de Perro
+isinstance(mi_perro, Perro)
+
+# Constructor
+# Es un método que se ejecuta siempre que se cree una instancia de la clase.
+
+
+class Perro:
+    # self hace referencia a la instancia creada, es decir "mi_perro"
+    def __init__(self, nombre, edad):
+        self.nombre = nombre    # Creación de ATRIBUTOS o PROPIEDAD
+        self.edad = edad
+
+    def habla(self):  # Esto ya no se llama función, es un método. Self es obligatorio
+        print(f"{self.nombre} dice: Guau!")
+
+
+mi_perro = Perro("Toby", 23)
+print(mi_perro.nombre)
+
+mi_perro2 = Perro("Felipe", 1)
+print(mi_perro2.nombre)
+
+
+# Propiedades de las clases
+# Diferencia entre propiedades de clase y de instancia
+
+
+class Perro:
+    patas = 4  # Propiedad de la clase
+    # self hace referencia a la instancia creada, es decir "mi_perro"
+
+    def __init__(self, nombre, edad):
+        self.nombre = nombre    # Creación PROPIEDAD de instancias (atributos)
+        self.edad = edad        # Creación PROPIEDAD de instancias (atributos)
+
+    def habla(self):  # Esto ya no se llama función, es un método. Self es obligatorio
+        print(f"{self.nombre} dice: Guau!")
+
+
+mi_perro = Perro("Toby", 3)
+print(Perro.patas)  # => 4 Puedo acceder a través de la clase
+print(mi_perro.patas)  # => 4
+Perro.patas = 5
+print(Perro.patas)  # => 5
+print(mi_perro.patas)  # => 5
+mi_perro.patas = 6
+print(Perro.patas)  # => 5
+print(mi_perro.patas)  # => 6
+Perro.patas = 7
+mi_perro2 = Perro("Jango", 5)
+print(Perro.patas)  # => 7
+print(mi_perro2.patas)  # => 7
+print(mi_perro.patas)  # => 6 YA NO ES 7 PORQUE LO MODIFIQUE UNA VEZ
+
+
+# Método de clase
+# Usos:
+# 1) Métodos en común para todas las intancias de la clase
+# 2) Factory method para crear intancias de la clsae
+
+class Perro:
+    patas = 4
+
+    def __init__(self, nombre, edad):
+        self.nombre = nombre
+        self.edad = edad
+
+    @classmethod
+    def habla(cls):  # cls se refiere a la clase misma: Perro
+        print("Guau!")
+
+    @classmethod
+    def factory(cls):  # Factory method. Crea instancias de perro
+        return cls("Toby", 4)
+
+
+perro3 = Perro.factory()
+
+
+# Propiedades y métodos privados
+
+class Perro:
+
+    def __init__(self, nombre, edad):
+        self.__nombre = nombre  # Propiedades privadas
+        self.edad = edad
+
+    def get_nombre(self):
+        return self.__nombre
+
+    # Encapsular la asignación de nombre en un método puede servir
+    # para aplicar cierta lógica de negocio y evitar que se
+    # asignen, por ejemplo un número negativo al nombre del perro
+    def set_nombre(self, nombre):
+        self.__nombre = nombre
+
+    def __habla(self):  # MÉTODO PRIVADO
+        print(f"{self.__nombre} dice: Guau!")
+
+    @classmethod
+    def factory(cls):  # Factory method. Crea instancias de perro
+        return cls("Toby", 4)
+
+
+perro1 = Perro.factory()
+print(perro1.habla())
+print(perro1.__nombre)  # => error, atributo privado
+print(perro1.get_nombre())
+
+# Puedo hackear y ver las propiedades privadas de todas formas
+# Pero no hay que hacerlo ya que si se ha declarado privado
+# es porque el desarrollador lo ha estipulado así.
+print(perro1.__dict__)
+print(perro1._Perro__nombre)
+
+# Decorador property
+
+class Perro:
+
+    def __init__(self, nombre, edad):
+        self.nombre = nombre #Pasa por la validación del setter
+
+    @property
+    def nombre(self):
+        return self.__nombre
+
+    @nombre.setter
+    def nombre(self, nombre):
+        if nombre.strip()
+            self.__nombre = nombre
+        return
+
+perro = Perro("Toby")
+
+# Métodos mágicos
+# Se ejecuntan cuando no lo llamamos directamente
+# __init__ es uno de ellos
+# Todos comienzan y terminan con __
+# Google: https://rszalski.github.io/magicmethods/ Representing your classes
+# 
+class Perro:
+    def __init__(self, nombre, edad):
+        self.nombre = nombre   
+        self.edad = edad
+
+    def __str__(self):
+        return f"Clase Perro: {self.nombre}"
+
+    def habla(self):  # Esto ya no se llama función, es un método. Self es obligatorio
+        print(f"{self.nombre} dice: Guau!")
+
+
+perro = Perro("Toby")
+text = str(perro) #=> Llama a nuestro método mágico __str__
+
+# Destructor
+# Es un método mágico
+
+class Perro:
+    def __init__(self, nombre, edad):
+        self.nombre = nombre   
+        self.edad = edad
+
+    def __del__(self):
+        print(f"Chao peror :-( {self.nombre}")
+
+    def __str__(self):
+        return f"Clase Perro: {self.nombre}"
+
+    def habla(self):  # Esto ya no se llama función, es un método. Self es obligatorio
+        print(f"{self.nombre} dice: Guau!")
+
+
+perro = Perro("Toby")
+del perro
+
+# Comparación de objetos
+
+class Coordenadas:
+    def __init__(self, lat, lon):
+        self.lat = lat
+        self.lon = lon
+
+    def __eq__(self, otro): #Otra instancia de la otra clase
+        return self.lat == otro.lat and self.lon == otro.lon
+    # Python es capaz de inferir el métod mágico __ne__ si ya tengo el __eq__
+    
+    
+    # Con lo cual no es necesario ponerlo
+    def __ne__(self, otro):
+        return self.lat != otro.lat or self.lon != otro.lon
+    # Python es capaz de inferir el métod mágico __ne__ si ya tengo el __eq__
+    
+    def __lt__(self, otro): # less than: coords < coords2) 
+        return self.lat + self.lon < otro.lat + otro.lon
+    # Python infiere automáticamente el coords > coords2
+
+    def __le__(self, otro): #less or equal
+        return self.lat + self.lon <= otro.lat + otro.lon
+    # Python infiere automáticamente el coords >= coords2
+
+    
+coords = Coordenadas(45,27)
+coords2 = Coordenadas(45, 27)
+print(coords == coords2) # Sin método mágico __eq__
+#=> False porque ocupan dos espacios en memoria diferentes. No son el mismo objeto
+print(coords == coords2) # Con método mágico __eq__
+# Cuando defino el método mágico __eq__, la cosa cambia
+
+print(coords != coords2) # Con método mágico __eq__
+
+print(coords < coords2) # Con método mágico __lt__
+
+print(coords <= coords2) # Con método mágico __le__
+
+# Contenedores: Meter objetos dentro de otros objetos
+
+class Producto:
+    def __init__(self, nombre, precio):
+        self.nombre = nombre
+        self.precio = precio
+    
+    def __str__(self):
+        return f"Producto {self.nombre} - Precio: {self.precio}"
+        
+    
+
+
+class Categoria:
+    productos = []
+    def __init__(self, nombre, productos):
+        self.nombre = nombre
+        self.productos = productos
+    
+    def agregar(self, producto):
+        self.productos.append(producto)
+
+    def imprimir(self):
+        for producto in self.productos:
+            print(producto)
+
+kayak = Producto("Kayak", 1000)
+bicicleta = Producto("Bicicleta", 750)
+surfboard = Producto("Surfboard", 500)
+deportes = Categoria("Deporte", [kayak, bicicleta])
+
+deportes.agregar(surfboard)
+
+deportes.imprimir()
+
+
+# Herencia
+class Animal:
+    def comer(self):
+        print("comieno")
+
+    
+class Perro(Animal):
+    def pasear(self):
+        print("paseando")
+
+perro = Perro()
+
+class Chanchito(Perro): #Herencia multinivel. No hacerlo con más de 1 o 2 niveles
+    
+    def programar(self):
+        print("programando")
+
+# Herencia múltiple
+
+class Animal:
+    def comer(self):
+        print("comieno")
+    
+    def pasear(self):
+        print("paseando animales")
+
+    
+class Perro():
+    def pasear(self):
+        print("paseando al perro")
+
+
+# Cuidado con el orden de herencia, del orden depende los métodos que se elijan
+# en el caso de que estén repetidos. Se va de derecha a izquierda, quedándose con el 
+# de más a la izquierda.
+class Chanchito(Perro, Animal):
+    
+    def programar(self):
+        print("programando")
+
+chanchito = Chanchito()
+chanchito.pasear() #=> "paseando al perro".
+# Recoge los métodos de izquierda a derecha en función del orden
+# en cómo se ha definido la herencia. Chanchito(Perro, Animal)
+# Si la hubiera definido Chanchito(Animal, Perro) imprimiría
+# "paseando animal"
